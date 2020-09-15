@@ -29,20 +29,23 @@ class LogoutView(BaseView):
         return current_user.is_authenticated
 
 
-class KindOfRoomModelView(AuthenticatedView):
+class KindOfRoomModelView(ModelView):
     column_display_pk = True
     form_columns = ('name', 'unit_price', 'note')
     column_labels = dict(name="Loại phòng", unit_price="Đơn giá", note="Ghi chú")
 
-    # def is_accessible(self):
-    #     return current_user.is_authenticated and \
-    #            (current_user.roles == "tieptan" or current_user.roles == "admin")
+    def is_accessible(self):
+        return current_user.is_authenticated and \
+               (current_user.roles == "admin")
+
+    #(current_user.roles == "abc" or current_user.roles == "ad"
 
 
 class RoomModelView(AuthenticatedView):
     column_display_pk = True
     form_columns = ('name', 'kind_of_room_id', 'status')
-    column_labels = dict(name="Số phòng", kind_of_room_id="Loại phòng", status="Trạng thái")
+    # column_labels = dict(name="Số phòng", kind_of_room_id="Loại phòng", status="Trạng thái")
+    column_labels = {"name": "Số phòng", "KindOfRoom": "Loại phòng", "status": "Trạng thái"}
 
     def is_accessible(self):
         return current_user.is_authenticated

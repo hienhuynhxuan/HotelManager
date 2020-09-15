@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
 
 # class Customer(db.Model):
-#     _tablename__ = "customer"
+#     _tablename__ = "client"
 #     id = Column(Integer, primary_key=True, autoincrement=True)
 #     name = Column(String(50), nullable=False)               #tên kh
 #     address = Column(String(50), nullable=False)            #địa chỉ

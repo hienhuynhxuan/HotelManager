@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Suite &mdash; Colorlib Website Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700|Work+Sans:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/icomoon/style.css')}}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css')}}css/animate.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/mediaelementplayer.min.css">
+
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/flaticon/font/flaticon.css')}}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aos.css')}}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+
+  </head>
+  <body>
+
+  <div class="site-wrap">
+
+    <!--HEADER-->
+    {% block header %}
+        {% include 'base/header.html' %}
+    {% endblock %}
+
+
+    <!--BANNER-->
+    {% block banner %}
+        {% include 'base/banner.html' %}
+    {% endblock %}
+
+
+<!--    &lt;!&ndash;CONTENT&ndash;&gt;-->
+<!--    {% block content %}-->
+<!--        {% include 'base/content.html' %}-->
+<!--    {% endblock %}-->
+
+
+<!--    &lt;!&ndash;ABOUT&ndash;&gt;-->
+<!--    {% block aboutus %}-->
+<!--        {% include 'base/aboutus.html' %}-->
+<!--    {% endblock %}-->
+
+
+<!--    &lt;!&ndash;FEATURE&ndash;&gt;-->
+<!--    {% block feature %}-->
+<!--        {% include 'base/feature.html' %}-->
+<!--    {% endblock %}-->
+
+
+<!--    &lt;!&ndash;DISCOUNT&ndash;&gt;-->
+<!--    {% block discount %}-->
+<!--        {% include 'base/discount.html' %}-->
+<!--    {% endblock %}-->
+
+
+<!--    &lt;!&ndash;GALLERY&ndash;&gt;-->
+<!--    {% block gallery %}-->
+<!--        {% include 'base/gallery.html' %}-->
+<!--    {% endblock %}-->
+
+
+<!--    &lt;!&ndash;EVENT&ndash;&gt;-->
+<!--    {% block event %}-->
+<!--        {% include 'base/event.html' %}-->
+<!--    {% endblock %}-->
+
+
+<!--    &lt;!&ndash;FEEDBACK&ndash;&gt;-->
+<!--    {% block feedback %}-->
+<!--        {% include 'base/feedback.html' %}-->
+<!--    {% endblock %}-->
+
+
+
+    <!-- <div class="py-5 quick-contact-info">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <div>
+              <span class="icon-room text-white h2 d-block"></span>
+              <h2>Location</h2>
+              <p class="mb-0">New York - 2398 <br>  10 Hadson Carl Street</p>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div>
+              <span class="icon-clock-o text-white h2 d-block"></span>
+              <h2>Service Times</h2>
+              <p class="mb-0">Wednesdays at 6:30PM - 7:30PM <br>
+              Fridays at Sunset - 7:30PM <br>
+              Saturdays at 8:00AM - Sunset</p>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div>
+              <span class="icon-comments text-white h2 d-block"></span>
+              <h2>Get In Touch</h2>
+              <p class="mb-0">Email: info@yoursite.com <br>
+              Phone: (123) 3240-345-9348 </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+
+  <!--FOOTER-->
+    {% block footer %}
+        {% include 'base/footer.html' %}
+    {% endblock %}
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/jquery-migrate-3.0.1.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/jquery-ui.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/popper.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/owl.carousel.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.stellar.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.countdown.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap-datepicker.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/aos.js')}}"></script>
+
+
+  <script src="{{ url_for('static', filename='js/mediaelement-and-player.min.js')}}"></script>
+
+  <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+                var mediaElements = document.querySelectorAll('video, audio'), total = mediaElements.length;
+
+                for (var i = 0; i < total; i++) {
+                    new MediaElementPlayer(mediaElements[i], {
+                        pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/',
+                        shimScriptAccess: 'always',
+                        success: function () {
+                            var target = document.body.querySelectorAll('.player'), targetTotal = target.length;
+                            for (var j = 0; j < targetTotal; j++) {
+                                target[j].style.visibility = 'visible';
+                            }
+                  }
+                });
+                }
+            });
+    </script>
+
+  </body>
+</html>

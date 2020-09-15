@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+
+<!--BANNER-->
+{% block banner %}
+    <div class="site-blocks-cover overlay" style="background-image: url({{ url_for('static', filename='images/hero_1.jpg')}});" data-aos="fade" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-md-7 text-center" data-aos="fade">
+              <span class="caption mb-3">Chat With Us</span>
+              <h1 class="mb-4">Register</h1>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="site-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mx-auto text-center mb-5 section-heading">
+            <h2 class="mb-5">Register</h2>
+          </div>
+        </div>
+
+        {% if err_msg %}
+        <div class="alert alert-danger">
+            <h1>{{ err_msg }}</h1>
+        </div>
+        {% endif %}
+        <form method="post">
+            <div class="form-group">
+                <input type="text" placeholder="Name..."
+                       name="name" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Username..."
+                       name="username" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password..."
+                       name="password" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Xac nhan mat khau..."
+                       name="confirm" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register"
+                       class="btn btn-danger" />
+            </div>
+        </form>
+      </div>
+    </div>
+{% endblock %}
+

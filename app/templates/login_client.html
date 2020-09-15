@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+
+
+<!--BANNER-->
+{% block banner %}
+    <div class="site-blocks-cover overlay" style="background-image: url({{ url_for('static', filename='images/hero_1.jpg')}});" data-aos="fade" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-md-7 text-center" data-aos="fade">
+              <span class="caption mb-3">Chat With Us</span>
+              <h1 class="mb-4">Login</h1>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="site-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mx-auto text-center mb-5 section-heading">
+            <h2 class="mb-5">Login</h2>
+          </div>
+        </div>
+        <form method="post">
+            <div class="form-group">
+                <input type="text" placeholder="Username..."
+                       name="username" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password..."
+                       name="password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login"
+                       class="btn btn-danger" />
+                <a href="{{ url_for('login_admin')}}">Log in as another!</a>
+            </div>
+            <div class="form-group">
+                <label>Do not have an account?</label>
+                <a href="{{ url_for('register')}}">Registration!</a>
+            </div>
+        </form>
+      </div>
+    </div>
+{% endblock %}
+
