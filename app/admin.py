@@ -35,15 +35,16 @@ class LogoutView(BaseView):
 
 class UserModelView(AuthenticatedView):
     column_display_pk = True
-    column_labels = dict(name="Tên người dùng", active="Kích hoạt"
+    column_labels = dict(name="Tên người dùng"
                          , user_name="Tên đăng nhập", pass_word="Mật khẩu", roles="Vai trò")
+    form_excluded_columns = ['user1', 'user2']
 
     def on_model_change(self, form, User, is_created=False):
         User.pass_word = hashlib.md5(User.pass_word.encode('utf-8')).hexdigest()
 
     def is_accessible(self):
         return current_user.is_authenticated and \
-               (current_user.roles == "admin")
+               current_user.roles == Role.admin
 
 
 class KindOfRoomModelView(AuthenticatedView):
@@ -53,7 +54,7 @@ class KindOfRoomModelView(AuthenticatedView):
 
     def is_accessible(self):
         return current_user.is_authenticated and \
-               (current_user.roles == "admin")
+               current_user.roles == Role.admin
 
     # (current_user.roles == "abc" or current_user.roles == "ad"
 
@@ -65,13 +66,13 @@ class CustomerTypeModelView(AuthenticatedView):
 
     def is_accessible(self):
         return current_user.is_authenticated and \
-               (current_user.roles == "admin")
+               current_user.roles == Role.admin
 
 
 class RoomModelView(AuthenticatedView):
     column_display_pk = True
     form_columns = ('name', 'KindOfRoom', 'status', 'amount')
-    column_labels = {"id": "Mã phòng", "name": "Phòng", "KindOfRoom": "Loại phòng", "status": "Trạng thái", "amount": "Số lượng"}
+    column_labels = {"id": "Mã phòng", "name": "Phòng", "KindOfRoom": "Loại phòng", "status": "Trạng thái", "amount": "Số người"}
 
     def _status_formatter(view, context, model, name):
         if model.status:
@@ -88,23 +89,24 @@ class RoomModelView(AuthenticatedView):
 class SurchargeModelView(AuthenticatedView):
     column_display_pk = True
     column_list = ["amount", "surcharge"]
-    column_labels = {"amount": "Số lượng", "surcharge": "Phụ thu (%)"}
+    column_labels = {"amount": "Số người", "surcharge": "Phụ thu (%)"}
     form_excluded_columns = ['rentSlip']
 
     def is_accessible(self):
         return current_user.is_authenticated and \
-               (current_user.roles == "admin")
+               current_user.roles == Role.admin
 
 
 class RentSlipModelView(AuthenticatedView):
     column_display_pk = True
     column_labels = {"id": "Mã PT", "Room": "Phòng", "hire_start_date": "Ngày bắt đầu thuê",
-                     "customer_name": "Khách hàng", "Surcharge": "Số lượng và phụ thu", "CustomerType": "Loại khách",
+                     "customer_name": "Khách hàng", "Surcharge": "Số người và phụ thu", "CustomerType": "Loại khách",
                      "identity_card": "CMND", "address": "Địa chỉ"}
-    form_excluded_columns = ['bill']
+    form_excluded_columns = ['bill', 'User']
 
     def on_model_change(self, form, RentSlip, is_created):
         room = Room.query.get(form.Room.data.id)
+        RentSlip.rentslip_user = current_user.id
         if form.Room.data.status == Status.OutOfRoom:
             raise validators.ValidationError("Phòng đã có người đặt")
         else:
@@ -117,10 +119,14 @@ class BillModelView(AuthenticatedView):
     column_display_pk = True
     column_labels = {"id": "Mã hóa đơn", "date_of_payment": "Số ngày thuê", "value": "Trị giá", "price": "Thành tiền",
                      "RentSlip": "Mã phiếu thuê"}
-    form_excluded_columns = ['date_of_payment', 'value', 'price']
+    form_excluded_columns = ['date_of_payment', 'value', 'price', 'User']
 
     def on_model_change(self, form, Bill, is_created):
         room = Room.query.get(form.RentSlip.data.room_id)
+
+        if room.status == Status.ThereIsRoom:
+            raise validators.ValidationError("Phòng đã trả")
+
         if form.RentSlip.data.Room.status == Status.OutOfRoom:
             room.status = Status.ThereIsRoom
             db.session.add(room)
@@ -130,10 +136,11 @@ class BillModelView(AuthenticatedView):
             billOfPay = (datetime.now().hour - form.RentSlip.data.hire_start_date.hour)
         else:
             billOfPay = (datetime.now() - form.RentSlip.data.hire_start_date).days * 24
-            hourOfPri = billOfPay * form.RentSlip.data.Room.KindOfRoom.unit_price
 
+        hourOfPri = billOfPay * form.RentSlip.data.Room.KindOfRoom.unit_price
         Bill.date_of_payment = billOfPay / 24  # so ngay
         Bill.value = hourOfPri
+        Bill.bill_user = current_user.id
 
         if form.RentSlip.data.Surcharge.surcharge == 0 and form.RentSlip.data.CustomerType.coefficient == 0:
             Bill.price = hourOfPri
@@ -162,13 +169,15 @@ class RoomListView(BaseView):
                                                      amount=amount), status=Status)
 
 
-admin.add_view(RoomListView(name="Danh sách phòng"))
 admin.add_view(AboutUsView(name="Giới Thiệu"))
-admin.add_view(KindOfRoomModelView(KindOfRoom, db.session, name="Loại Phòng"))
-admin.add_view(SurchargeModelView(Surcharge, db.session, name="Phụ thu"))
-admin.add_view(CustomerTypeModelView(CustomerType, db.session, name="Loại Khách Hàng"))
+admin.add_view(RoomListView(name="Danh sách phòng"))
 admin.add_view(RoomModelView(Room, db.session, name="Phòng"))
 admin.add_view(RentSlipModelView(RentSlip, db.session, name="Lập phiếu Thuê"))
 admin.add_view(BillModelView(Bill, db.session, name="Lập hóa đơn"))
+#báo cáo
+admin.add_view(KindOfRoomModelView(KindOfRoom, db.session, name="Loại Phòng"))
+admin.add_view(SurchargeModelView(Surcharge, db.session, name="Phụ thu"))
+admin.add_view(CustomerTypeModelView(CustomerType, db.session, name="Loại Khách Hàng"))
+
 admin.add_view(UserModelView(User, db.session, name="Người Dùng"))
 admin.add_view(LogoutView(name="Đăng Xuất"))
